@@ -72,7 +72,7 @@ podman run -d \
     ramalama --store /models serve \
     --port ${MODELSERVER_PORT} \
     --host 0.0.0.0 \
-    huggingface://instructlab/phi-4-mini-instruct-GGUF/phi-4-mini-instruct-Q4_K_M.gguf
+    huggingface://bartowski/microsoft_Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf
 
 # Wait for model server to be ready
 echo "Waiting for model server to be ready..."
