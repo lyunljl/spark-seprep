@@ -36,8 +36,6 @@ services:
   model-server:
     image: quay.io/ramalama/ramalama:latest
     container_name: rag-chatbot-model
-    environment:
-      HF_HOME: /models/.cache/huggingface
     ports:
       - "${MODELSERVER_PORT:-8888}:${MODELSERVER_PORT:-8888}"
     volumes:
@@ -46,7 +44,7 @@ services:
       ramalama --store /models serve
       --port ${MODELSERVER_PORT:-8888}
       --host 0.0.0.0
-      huggingface://bartowski/microsoft_Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf
+      ollama://phi4-mini:latest
     deploy:
       resources:
         reservations:

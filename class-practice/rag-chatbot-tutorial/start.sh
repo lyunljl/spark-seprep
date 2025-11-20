@@ -47,7 +47,7 @@ podman pod create \
 
 # Start PostgreSQL with pgvector
 echo "Starting PostgreSQL with pgvector extension..."
-podman run -d \
+podman run -d --rm \
     --pod $POD_NAME \
     --name $POD_NAME-pgvector \
     -e POSTGRES_USER=${POSTGRES_USER} \
@@ -63,16 +63,15 @@ sleep 5
 echo "Starting ramalama model server with ${MODEL_NAME}..."
 echo "⏳ This may take a few minutes to download the model on first run..."
 
-podman run -d \
+podman run -d --rm \
     --pod $POD_NAME \
     --name $POD_NAME-model \
-    -e HF_HOME=/models/.cache/huggingface \
     -v rag-models:/models:Z \
     quay.io/ramalama/ramalama:latest \
     ramalama --store /models serve \
     --port ${MODELSERVER_PORT} \
     --host 0.0.0.0 \
-    huggingface://bartowski/microsoft_Phi-4-mini-instruct-GGUF/Phi-4-mini-instruct-Q4_K_M.gguf
+    ollama://phi4-mini:latest
 
 # Wait for model server to be ready
 echo "Waiting for model server to be ready..."
@@ -100,7 +99,7 @@ podman build -t rag-chatbot-app:latest ./app
 
 # Start chatbot application
 echo "Starting RAG chatbot application..."
-podman run -d \
+podman run -d --rm \
     --pod $POD_NAME \
     --name $POD_NAME-app \
     -e MODEL_ENDPOINT=http://127.0.0.1:${MODELSERVER_PORT} \

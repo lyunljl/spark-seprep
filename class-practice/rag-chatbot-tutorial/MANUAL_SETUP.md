@@ -74,7 +74,7 @@ podman pod create \
 Start the vector database:
 
 ```bash
-podman run -d \
+podman run -d --rm \
     --pod rag-chatbot \
     --name rag-chatbot-pgvector \
     -e POSTGRES_USER=postgres \
@@ -109,16 +109,15 @@ You should see PostgreSQL version information.
 Start the AI model server:
 
 ```bash
-podman run -d \
+podman run -d --rm \
     --pod rag-chatbot \
     --name rag-chatbot-model \
-    -e HF_HOME=/models/.cache/huggingface \
     -v rag-models:/models:Z \
     quay.io/ramalama/ramalama:latest \
     ramalama --store /models serve \
     --port 8888 \
     --host 0.0.0.0 \
-    huggingface://instructlab/phi-4-mini-instruct-GGUF/phi-4-mini-instruct-Q4_K_M.gguf
+    ollama://phi4-mini:latest
 ```
 
 **What this does**:
@@ -179,7 +178,7 @@ You should see `localhost/rag-chatbot-app` with tag `latest`.
 Start the Streamlit UI:
 
 ```bash
-podman run -d \
+podman run -d --rm \
     --pod rag-chatbot \
     --name rag-chatbot-app \
     -e MODEL_ENDPOINT=http://127.0.0.1:8888 \
